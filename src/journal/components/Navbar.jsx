@@ -7,7 +7,7 @@ export const Navbar = ({ drawerWidth = 240 }) => {
         position='fixed'
         sx={{
             width: {sm: `calc(100% - ${ drawerWidth }px)`},
-            ml: { sm: `${drawerWidth}px`} 
+            // ml: { sm: `${drawerWidth}px`} 
         }}
     >
         <Toolbar>
