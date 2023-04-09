@@ -9,7 +9,7 @@ export const NothingSelectedView = () => {
       direction='column'
       alignItems='center'
       justifyContent='center'
-      sx={{ minHeight: '100vh', backgroundColor: 'primary.main', borderRadius: 3 }}
+      sx={{ minHeight: 'calc(100vh - 100px)', backgroundColor: 'primary.main', borderRadius: 3 }}
     >
         <Grid item xs={ 12 }>
             <StarOutline sx={{ fontSize: 100, color: 'white'}}/>
