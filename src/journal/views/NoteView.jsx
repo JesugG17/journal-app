@@ -1,4 +1,4 @@
-import { SaveOutlined } from '@mui/icons-material'
+import SaveOutlined from '@mui/icons-material/SaveOutlined'
 import { Button, Grid, TextField, Typography } from '@mui/material'
 import { ImageGallery } from '../components/ImageGallery'
 
