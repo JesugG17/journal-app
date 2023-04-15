@@ -1,4 +1,4 @@
-import { signInWithEmailAndPassword, signInWithGoogle } from '../../firebase/providers';
+import { logInWithEmailAndPassword, signInWithEmailPassword, signInWithGoogle } from '../../firebase/providers';
 import { checkingCredentials, login, logout } from './'
 
 export const checkingAuthentication = ( email, password ) => {
@@ -24,9 +24,23 @@ export const startGoogleSignIn = () => {
 
 export const startCreatingUserWithEmailPassword = ( user ) => {
     return async( dispatch ) => {
-        dispatch(checkingAuthentication());
+        dispatch(checkingCredentials());
 
-        const result = await signInWithEmailAndPassword(user);
+        const result = await signInWithEmailPassword(user);
+        if (!result.ok) {
+            return dispatch( logout(result) );
+        }
+
+        dispatch( login(result) );
+    }
+}
+
+export const startLogInWithEmailPassword = (user) => {
+    return async( dispatch ) => {
+        dispatch( checkingCredentials() );
+
+        const result = await logInWithEmailAndPassword(user);
+
         if (!result.ok) {
             return dispatch( logout(result) );
         }
