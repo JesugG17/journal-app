@@ -11,8 +11,12 @@ import { Box,
          ListItemText, 
          Toolbar, 
          Typography } from '@mui/material'
+import { useSelector } from 'react-redux'
 
 export const Sidebar = ({ drawerWidth }) => {
+
+    const { displayName } = useSelector(state => state.auth);
+
   return (
     <Box
         component='nav'
@@ -29,7 +33,7 @@ export const Sidebar = ({ drawerWidth }) => {
         >
             <Toolbar>
                 <Typography variant='h6' noWrap component='div'>
-                    Jesus Gastelum
+                    { displayName }
                 </Typography>
             </Toolbar>
             <Divider />

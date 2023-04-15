@@ -13,7 +13,7 @@ export const startGoogleSignIn = () => {
         dispatch( checkingCredentials() );
 
         const result = await signInWithGoogle();
-        // console.log(result);
+
         if (!result.ok) {
             return dispatch( logout(result) );
         }
@@ -27,6 +27,7 @@ export const startCreatingUserWithEmailPassword = ( user ) => {
         dispatch(checkingCredentials());
 
         const result = await signInWithEmailPassword(user);
+        
         if (!result.ok) {
             return dispatch( logout(result) );
         }
