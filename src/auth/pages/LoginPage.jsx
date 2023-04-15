@@ -10,8 +10,8 @@ import { checkingAuthentication, startGoogleSignIn } from '../../store/auth';
 import { useMemo } from 'react';
 
 const formData = {
-  email: 'jesus@gmail.com',
-  password: '123456'
+  email: '',
+  password: ''
 }
 
 export const LoginPage = () => {
@@ -31,7 +31,6 @@ export const LoginPage = () => {
 
   const onGoogleSignIn = () => {
     dispatch( startGoogleSignIn() );
-    console.log('onGoogleSignIn');
   }
 
   return (
