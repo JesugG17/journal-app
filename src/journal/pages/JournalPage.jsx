@@ -9,7 +9,7 @@ export const JournalPage = () => {
 
   const dispatch = useDispatch();
   const { isSaving, activeNote } = useSelector(state => state.journal);
-
+  
   const onNewNote = () => {
     dispatch(startNewNote())
   }

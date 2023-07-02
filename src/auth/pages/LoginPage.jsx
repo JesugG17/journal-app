@@ -17,8 +17,6 @@ const formData = {
 export const LoginPage = () => {
 
   const { status, errorMessage } = useSelector( state => state.auth );
-  const reducers = useSelector(state => state);
-  console.log(reducers);
   const { email, password, onInputChange, formState } = useForm(formData);
   const dispatch = useDispatch();
 
