@@ -17,6 +17,8 @@ const formData = {
 export const LoginPage = () => {
 
   const { status, errorMessage } = useSelector( state => state.auth );
+  const reducers = useSelector(state => state);
+  console.log(reducers);
   const { email, password, onInputChange, formState } = useForm(formData);
   const dispatch = useDispatch();
 
@@ -24,6 +26,8 @@ export const LoginPage = () => {
 
   const onSubmit = (event) => {
     event.preventDefault();
+
+    if (email.length <= 1 || password.length <= 1) return;
 
     dispatch( startLogInWithEmailPassword(formState) );
   }
