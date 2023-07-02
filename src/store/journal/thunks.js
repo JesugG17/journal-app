@@ -1,6 +1,7 @@
 import { collection, doc, setDoc } from 'firebase/firestore/lite';
 import { FirebaseCloudStore } from '../../firebase/config';
-import { addNewEmptyNote, isSavingNewNote, setActiveNote } from './journalSlice';
+import { addNewEmptyNote, isSavingNewNote, setActiveNote, setNotes } from './journalSlice';
+import { loadNotes } from '../../journal/utils';
 
 export const startNewNote = () => {
     return async( dispatch, getState ) => {
@@ -8,7 +9,7 @@ export const startNewNote = () => {
         dispatch( isSavingNewNote() );
 
         const { auth } = getState();
-        const { uid } = auth
+        const { uid } = auth;
         
         const newNote = {
             title: '',
@@ -23,4 +24,17 @@ export const startNewNote = () => {
         dispatch(addNewEmptyNote(newNote));
         dispatch(setActiveNote(newNote));
     }   
+}
+
+export const startLoadingNotes = () => {
+    return async( dispatch, getState ) => {
+        const { auth } = getState();
+        const { uid } = auth
+        if (!uid) throw new Error('uid is required');
+
+        const notes = await loadNotes(uid);
+        
+        dispatch(setNotes(notes));
+        
+    }
 }
