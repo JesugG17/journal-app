@@ -9,7 +9,7 @@ import Swal from 'sweetalert2'
 import { ImageGallery } from '../components/ImageGallery'
 import { useForm } from '../../hooks/useForm'
 import { setActiveNote } from '../../store/journal/journalSlice'
-import { startUpdatingNote } from '../../store/journal/thunks'
+import { startUpdatingNote, startUploadingFiles } from '../../store/journal/thunks'
 
 export const NoteView = () => {
 
@@ -31,8 +31,8 @@ export const NoteView = () => {
     const onFileInputChange = ({target}) => {
         if (target.files.length === 0) return;
 
-        console.log('subiendo archivos');
-        // dispatch(startUploadingFiles(target.files));
+        // console.log('subiendo archivos');
+        dispatch(startUploadingFiles(target.files));
     }
 
     useEffect(() => {
@@ -57,18 +57,23 @@ export const NoteView = () => {
             <input 
                 multiple
                 type='file'
-                ref={fileInputRef}
-                onChange={onFileInputChange}
+                ref={ fileInputRef }
+                onChange={ onFileInputChange }
                 style={{ display: 'none' }}
             />
             <IconButton
                 color='primary'
-                disabled={isSaving}
+                disabled={ isSaving }
                 onClick={() => fileInputRef.current.click()}
             >
                 <UploadOutlined />
             </IconButton>
-            <Button onClick={ onSaveNote} color='primary' sx={{ padding: 2 }}>
+            <Button 
+                onClick={ onSaveNote} 
+                color='primary'
+                disabled={ isSaving } 
+                sx={{ padding: 2 }}
+            >
                 <SaveOutlined sx={{ fontSize: 30, mr: 1 }}/>
                 Guardar
             </Button>
