@@ -1,54 +1,60 @@
-import { Box, 
-         Divider, 
-         Drawer, 
-         List, 
-         Toolbar, 
-         Typography } from '@mui/material'
-import { useSelector } from 'react-redux'
-import { SiderbarItem } from './';
+import {
+  Box,
+  Divider,
+  Drawer,
+  IconButton,
+  List,
+  Toolbar,
+  Typography,
+  useMediaQuery,
+} from "@mui/material";
+import { useSelector } from "react-redux";
+import { SiderbarItem } from "./";
+import { CloseOutlined } from "@mui/icons-material";
 
-export const Sidebar = ({ drawerWidth }) => {
-
-    const { displayName } = useSelector(state => state.auth);
-    const { notes } = useSelector(state => state.journal);
-
+export const Sidebar = ({ drawerWidth, open, setOpen }) => {
+  const { displayName } = useSelector((state) => state.auth);
+  const { notes } = useSelector((state) => state.journal);
+  const matches = useMediaQuery((theme) => theme.breakpoints.up("sm"));
   return (
     <Box
-        component='nav'
-        sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 }}}
-    
+      component="nav"
+      sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }}
     >
-        <Drawer
-            variant='temporary'
-            open
-            sx={{
-                display: { xs: 'block' },
-                '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth },
-                zIndex: -999
-            }}
+      <Drawer
+        variant="persistent"
+        open={matches || open}
+        sx={{
+          display: matches && "block",
+          "& .MuiDrawer-paper": { boxSizing: "border-box", width: drawerWidth },
+        }}
+      >
+        <Toolbar
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+          }}
         >
-            <Toolbar>
-                <Typography variant='h6' noWrap component='div'>
-                    { displayName }
-                </Typography>
-            </Toolbar>
-            <Divider />
+          <Typography variant="h6" noWrap component="div">
+            {displayName}
+          </Typography>
+          {!matches && (
+            <IconButton
+              onClick={() => setOpen((prevState) => !prevState)}
+              color="error"
+            >
+              <CloseOutlined />
+            </IconButton>
+          )}
+        </Toolbar>
+        <Divider />
 
-            <List>
-                {
-                    notes.map( note => (
-                        <SiderbarItem 
-                            key={note.id}
-                            {...note}
-                        />
-                    ))
-                }
-
-            </List>
-
-        </Drawer>
-
-
+        <List>
+          {notes.map((note) => (
+            <SiderbarItem key={note.id} {...note} />
+          ))}
+        </List>
+      </Drawer>
     </Box>
-  )
-}
+  );
+};
