@@ -23,7 +23,8 @@ export const Sidebar = ({ drawerWidth }) => {
             open
             sx={{
                 display: { xs: 'block' },
-                '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth }
+                '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth },
+                zIndex: -999
             }}
         >
             <Toolbar>
