@@ -1,5 +1,4 @@
 
-
 export const fileUpload = async( file ) => {
 
     if (!file) throw new Error('the file is required');
@@ -17,13 +16,11 @@ export const fileUpload = async( file ) => {
             body: formData
         });
         
-        console.log({resp});
         if (!resp.ok) throw new Error('A error has ocurred while the file was uploading');
 
-        const cloudResp = await resp.json();
+        const { secure_url } = await resp.json();
 
-        console.log({cloudResp});
-        return cloudResp;
+        return secure_url;
 
     } catch (error) {
         throw new Error(error.message);
