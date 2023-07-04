@@ -3,6 +3,7 @@ import { AppBar, Grid, IconButton, Toolbar, Typography } from '@mui/material'
 import MenuOutlined from '@mui/icons-material/MenuOutlined'
 import LogoutOutlined from '@mui/icons-material/LogoutOutlined'
 import { startLogout } from '../../store/auth'
+import { logout } from '../../store/journal/journalSlice'
 
 export const Navbar = ({ drawerWidth = 240 }) => {
 
@@ -10,6 +11,7 @@ export const Navbar = ({ drawerWidth = 240 }) => {
 
     const onLogout = () => {
         dispatch(startLogout());
+        dispatch(logout());
     }
 
   return (
