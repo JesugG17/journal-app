@@ -1,66 +1,23 @@
-import { useEffect, useMemo, useRef } from 'react'
 
-import { useDispatch, useSelector } from 'react-redux'
-import { Button, Grid, Icon, IconButton, TextField, Typography } from '@mui/material'
+import { Button, Grid, IconButton, TextField, Typography } from '@mui/material'
 import { UploadOutlined, SaveOutlined, DeleteOutline } from '@mui/icons-material';
-import 'sweetalert2/dist/sweetalert2.css';
-import Swal from 'sweetalert2'
 
 import { ImageGallery } from '../components/ImageGallery'
-import { useForm } from '../../hooks/useForm'
-import { setActiveNote } from '../../store/journal/journalSlice'
-import { startDeletingNote, startUpdatingNote, startUploadingFiles } from '../../store/journal/thunks'
 import { NoImage } from '../components/NoImage';
+
+import { useNotesActions, useNotes } from '../hooks';
 
 export const NoteView = () => {
 
-    const fileInputRef = useRef();
-    const dispatch = useDispatch();
-    const { activeNote, savingMessage, isSaving } = useSelector(state => state.journal);
-    const { date, formState, onInputChange } = useForm(activeNote);
-
-    const dateString = useMemo(() => {
-        const newDate = new Date(date);
-        return newDate.toUTCString();
-    }, [date]);
-
-    const onSaveNote = (event) => {
-        event.preventDefault();
-        dispatch(startUpdatingNote());
-    }
-
-    const onFileInputChange = ({target}) => {
-        if (!target.files || target.files.length === 0) return;
-        dispatch(startUploadingFiles(target.files));
-    }
-
-    const onDelete = async() => {
-        const { isConfirmed } = await Swal.fire({
-            title: 'Are you sure that you want to delete it?',
-            text: 'This action cant not be undone later...',
-            icon: 'error',
-            showCancelButton: true,
-            showConfirmButton: true,
-            confirmButtonColor: 'green',
-            cancelButtonColor: 'red'
-        });
-        if (!isConfirmed) return;
-        dispatch(startDeletingNote());
-    }
-
-    useEffect(() => {
-        dispatch(setActiveNote(formState));
-    }, [formState]);
-
-    useEffect(() => {
-        if (savingMessage.length > 0) {
-            Swal.fire(
-                'Note updated', 
-                savingMessage, 
-                'success');
-        }
-    }, [savingMessage]);
-
+    const { onSaveNote, onFileInputChange, onDelete } = useNotesActions();
+    const {
+        fileInputRef,
+        journal,
+        formState,
+        onInputChange,
+        dateString    
+    } = useNotes();
+    
   return (
     <Grid container direction='row' justifyContent='space-between' alignItems='center' sx={{ mb: 1 }}>
         <Grid item>
@@ -76,7 +33,7 @@ export const NoteView = () => {
             />
             <IconButton
                 color='primary'
-                disabled={ isSaving }
+                disabled={ journal.isSaving }
                 onClick={() => fileInputRef.current.click()}
             >
                 <UploadOutlined />
@@ -84,7 +41,7 @@ export const NoteView = () => {
             <Button 
                 onClick={ onSaveNote} 
                 color='primary'
-                disabled={ isSaving } 
+                disabled={ journal.isSaving } 
                 sx={{ padding: 2 }}
             >
                 <SaveOutlined sx={{ fontSize: 30, mr: 1 }}/>
@@ -125,9 +82,9 @@ export const NoteView = () => {
                 </Button>
             </Grid>
             {
-                activeNote.imageUrls.length === 0
+                journal.activeNote.imageUrls.length === 0
                 ? <NoImage />
-                : <ImageGallery images={ activeNote.imageUrls }/>
+                : <ImageGallery images={ journal.activeNote.imageUrls }/>
             }
           
         </Grid>
