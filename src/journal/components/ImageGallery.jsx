@@ -1,7 +1,7 @@
-import { ImageList, ImageListItem } from '@mui/material';
-import { useSelector } from 'react-redux';
+import { ImageList, ImageListItem, Typography } from '@mui/material';
 
-export const ImageGallery = ({ images }) => {
+export const ImageGallery = ({ images = [] }) => {
+
 
   return (
     <ImageList sx={{ width: '100%', height: 500, '::-webkit-scrollbar': { display: 'none'} }} cols={4} rowHeight={200}>

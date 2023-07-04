@@ -10,6 +10,7 @@ import { ImageGallery } from '../components/ImageGallery'
 import { useForm } from '../../hooks/useForm'
 import { setActiveNote } from '../../store/journal/journalSlice'
 import { startUpdatingNote, startUploadingFiles } from '../../store/journal/thunks'
+import { NoImage } from '../components/NoImage';
 
 export const NoteView = () => {
 
@@ -29,7 +30,7 @@ export const NoteView = () => {
     }
 
     const onFileInputChange = ({target}) => {
-        if (target.files.length === 0) return;
+        if (!target.files || target.files.length === 0) return;
 
         // console.log('subiendo archivos');
         dispatch(startUploadingFiles(target.files));
@@ -101,10 +102,11 @@ export const NoteView = () => {
                 placeholder='¿Que sucedio el dia de hoy?'
                 minRows={ 5 }
             />
-
-            <ImageGallery 
-                images={ activeNote.imageUrls }
-            />
+            {
+                activeNote.imageUrls.length === 0
+                ? <NoImage />
+                : <ImageGallery images={ activeNote.imageUrls }/>
+            }
         </Grid>
     </Grid>
   )
