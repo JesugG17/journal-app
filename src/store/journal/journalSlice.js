@@ -7,13 +7,6 @@ export const journalSlice = createSlice({
         savingMessage: '',
         notes: [],
         activeNote: null
-        // activeNote: {
-        //     id: 'abc123',
-        //     title: '',
-        //     body: '',
-        //     date: 123456,
-        //     imageUrls: []
-        // }
     },
     reducers: {
         isSavingNewNote: (state) => {
@@ -44,14 +37,14 @@ export const journalSlice = createSlice({
             })
 
             state.savingMessage = `Note updated successfully!`;
-            // TODO: Mostrar mensaje de actualizacion
         },
         setPhotosToActiveNote: (state, {payload}) => {
             state.isSaving = false;
             state.activeNote.imageUrls = [...state.activeNote.imageUrls, ...payload];
         },
-        deleteNoteById: (state, action) => {
-            
+        deleteNoteById: (state, {payload: id}) => {
+            state.notes = state.notes.filter( note => note.id !== id);
+            state.activeNote = null;
         },
         clearNotesOnLogout: (state) => {
             state.isSaving = false,

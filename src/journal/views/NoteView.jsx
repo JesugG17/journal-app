@@ -1,15 +1,15 @@
 import { useEffect, useMemo, useRef } from 'react'
 
 import { useDispatch, useSelector } from 'react-redux'
-import { Button, Grid, IconButton, TextField, Typography } from '@mui/material'
-import { UploadOutlined, SaveOutlined } from '@mui/icons-material';
+import { Button, Grid, Icon, IconButton, TextField, Typography } from '@mui/material'
+import { UploadOutlined, SaveOutlined, DeleteOutline } from '@mui/icons-material';
 import 'sweetalert2/dist/sweetalert2.css';
 import Swal from 'sweetalert2'
 
 import { ImageGallery } from '../components/ImageGallery'
 import { useForm } from '../../hooks/useForm'
 import { setActiveNote } from '../../store/journal/journalSlice'
-import { startUpdatingNote, startUploadingFiles } from '../../store/journal/thunks'
+import { startDeletingNote, startUpdatingNote, startUploadingFiles } from '../../store/journal/thunks'
 import { NoImage } from '../components/NoImage';
 
 export const NoteView = () => {
@@ -17,7 +17,7 @@ export const NoteView = () => {
     const fileInputRef = useRef();
     const dispatch = useDispatch();
     const { activeNote, savingMessage, isSaving } = useSelector(state => state.journal);
-    const { title, body, date, formState, onInputChange } = useForm(activeNote);
+    const { date, formState, onInputChange } = useForm(activeNote);
 
     const dateString = useMemo(() => {
         const newDate = new Date(date);
@@ -31,9 +31,21 @@ export const NoteView = () => {
 
     const onFileInputChange = ({target}) => {
         if (!target.files || target.files.length === 0) return;
-
-        // console.log('subiendo archivos');
         dispatch(startUploadingFiles(target.files));
+    }
+
+    const onDelete = async() => {
+        const { isConfirmed } = await Swal.fire({
+            title: 'Are you sure that you want to delete it?',
+            text: 'This action cant not be undone later...',
+            icon: 'error',
+            showCancelButton: true,
+            showConfirmButton: true,
+            confirmButtonColor: 'green',
+            cancelButtonColor: 'red'
+        });
+        if (!isConfirmed) return;
+        dispatch(startDeletingNote());
     }
 
     useEffect(() => {
@@ -94,7 +106,7 @@ export const NoteView = () => {
             <TextField 
                 type='text'
                 variant='filled'
-                value={ formState.body }
+                value={formState.body}
                 name='body'
                 onChange={onInputChange}
                 fullWidth
@@ -102,12 +114,24 @@ export const NoteView = () => {
                 placeholder='¿Que sucedio el dia de hoy?'
                 minRows={ 5 }
             />
+            <Grid container justifyContent='end'>
+                <Button
+                    onClick={ onDelete }
+                    sx={{ mt: 2 }}
+                    color='error'
+                >
+                    <DeleteOutline />
+                    Borrar
+                </Button>
+            </Grid>
             {
                 activeNote.imageUrls.length === 0
                 ? <NoImage />
                 : <ImageGallery images={ activeNote.imageUrls }/>
             }
+          
         </Grid>
+
     </Grid>
   )
 }
